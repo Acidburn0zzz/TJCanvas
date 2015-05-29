@@ -47,11 +47,15 @@ function init(){
 
 function fetchDataFromAPI(){
 	console.log("fetchDataFromAPI calles");
-	var xmlhttp = new XMLHttpRequest(); 
-	var url = "http://localhost:3000/api/v1/timecapsule?j_id=1";
-	// var url = "https://traveljar.in/api/v1/timecapsule?j_id=1";
+	// tjar = json_variable;
+	// init();
+
+	 var xmlhttp = new XMLHttpRequest(); 
+	// var url = "http://192.168.1.2:3000/api/v1/timecapsule?j_id=20";
+	//var url = "http://192.168.1.15:3000/api/v1/timecapsule?j_id=20";
     // var url = "https://traveljar.in/timecapsule/dummy";
     // var url = "http://localhost:3000/timecapsule/dummy";
+      var url = "http://192.168.1.5:3000/timecapsule/dummy";
 
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -64,4 +68,9 @@ function fetchDataFromAPI(){
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
+
+
+
+
+
 

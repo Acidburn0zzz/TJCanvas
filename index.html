@@ -3,22 +3,31 @@
 
 <head>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/json.js"></script>
 	<script type="text/javascript" src="./js/fabric.js"></script>
 	<script type="text/javascript" src="./js/utils.js"></script>
-
 	<script type="text/javascript" src="./js/stage1.js"></script>
 	<script type="text/javascript" src="./js/stage2.js"></script>
 	<script type="text/javascript" src="./js/picture.js"></script>
+	<script type="text/javascript" src="./js/video.js"></script>
+	<script type="text/javascript" src="./js/notes.js"></script>
+	<script type="text/javascript" src="./js/moods.js"></script>
 	<script type="text/javascript" src="./js/path.js"></script>
 	<script type="text/javascript" src="./js/stage3.js"></script>
 	<script type="text/javascript" src="./js/myScript.js"></script>
 
 	<style type="text/css">
 
-
+#v {
+	display: none;
+ 	
+}
 
 	</style>
 </head>
+<video id="v" controls>
+ 	<source src="" >
+</video>
 <body onload="fetchDataFromAPI()" style="margin: 0px;">
 	
 	<canvas id="c" style="width:1000px;height:700px; position:absolute; top:0px"></canvas>

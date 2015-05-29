@@ -3,6 +3,8 @@ console.log("stage2 js lodaed");
 var headingTop = 75;   // the heading area
 var workableHeight;   // the entire area minus the heading area for the buddies to show
 
+
+
 function createStage2(canvas, friends){
 	// clear all objects added for stage 1
 	canvas.clear();
@@ -16,8 +18,30 @@ function createStage2(canvas, friends){
 	  originY: 'top'
 	});
 
+
+// var noOfFriends = friends.length;//no of friends
+// var friendsNamePicArray = {};
+
+
+// for (var i = 0; i < noOfFriends; i++) {	
+// friends[i].friend_item.name=friends[i].friend_item.profile_image;
+// console.log(friends[i].friend_item.profile_image);
+
+// };
+
+
+
+// console.log(friendsNamePicArray);
+
+
+
+
+
 	AddHeading(canvas);
 	showAllBuddies(canvas, friends);
+
+
+
 }
 
 // Adds buddies ( image + name ) depending upon the number of buddies

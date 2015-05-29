@@ -8,6 +8,7 @@ var picLeft = 100;
 var picTop = 100;
 
 function initPictures(){
+	console.log("init pictures called");
 	// Hide the base canvas and show separate canvas for memories
 	$('#c').hide();
 	$('#canvasForMemories').show();
@@ -17,6 +18,7 @@ function initPictures(){
 }
 
 function showPictures(){
+	console.log("showPictures with total pictures = " + totalPicturesInMilestone);
 	if(currPictureIndex < totalPicturesInMilestone){
 		currPictureItem = milestonesArray[curMilestoneIndex].stone.pictures[currPictureIndex].picture;
 		addPicture();
@@ -25,12 +27,12 @@ function showPictures(){
 		// this is the break-point for pictures
 		console.log("no pictures present");
 		currPictureIndex = 0;
-		initPath();
+		initVideo();
 	}
 }
 
 function addPicture(){
-
+	console.log("addPicture called");
 	// set canavs background image 
 	// Put same image with a little opacity
 	canvasForMemories.setBackgroundImage(currPictureItem.path, canvas.renderAll.bind(canvas), {
