@@ -8,21 +8,32 @@ function getScreenSizes(){
 	console.log("window" , ww, "and" , wh, "document" , dw, "and" , dh);
 
 	var body = document.body,
-     html = document.documentElement;
+ html = document.documentElement;
 
-	var height = Math.max( body.scrollHeight, body.offsetHeight, 
-	                       html.clientHeight, html.scrollHeight, html.offsetHeight );
-	console.log(height);
+ var height = Math.max( body.scrollHeight, body.offsetHeight, 
+  html.clientHeight, html.scrollHeight, html.offsetHeight );
+ console.log(height);
+}
+
+function isImagePortrait(someImg){
+  console.log(someImg);
+  if (someImg.width() <= someImg.height()){
+    //it's a portrait
+    return true;
+  } else{
+    //it's a landscape
+    return false;
+  }
 }
 
 // Function for wrapping text
 function wrapCanvasText(t, canvas, maxW, maxH, justify) {
 
-    if (typeof maxH === "undefined") {
-        maxH = 0;
-    }
-    var words = t.text.split(" ");
-    var formatted = '';
+  if (typeof maxH === "undefined") {
+    maxH = 0;
+  }
+  var words = t.text.split(" ");
+  var formatted = '';
 
     // This works only with monospace fonts
     justify = justify || 'left';
@@ -31,8 +42,8 @@ function wrapCanvasText(t, canvas, maxW, maxH, justify) {
     var sansBreaks = t.text.replace(/(\r\n|\n|\r)/gm, "");
     // calc line height
     var lineHeight = new fabric.Text(sansBreaks, {
-        fontFamily: t.fontFamily,
-        fontSize: t.fontSize
+      fontFamily: t.fontFamily,
+      fontSize: t.fontSize
     }).height;
 
     // adjust for vertical offset
@@ -46,86 +57,86 @@ function wrapCanvasText(t, canvas, maxW, maxH, justify) {
 
     n = 0;
     while (n < words.length) {
-        var isNewLine = currentLine == "";
-        var testOverlap = currentLine + ' ' + words[n];
+      var isNewLine = currentLine == "";
+      var testOverlap = currentLine + ' ' + words[n];
 
         // are we over width?
         var w = context.measureText(testOverlap).width;
 
         if (w < maxW) { // if not, keep adding words
-            if (currentLine != '') currentLine += ' ';
-            currentLine += words[n];
+          if (currentLine != '') currentLine += ' ';
+          currentLine += words[n];
             // formatted += words[n] + ' ';
-        } else {
+          } else {
 
             // if this hits, we got a word that need to be hypenated
             if (isNewLine) {
-                var wordOverlap = "";
+              var wordOverlap = "";
 
                 // test word length until its over maxW
                 for (var i = 0; i < words[n].length; ++i) {
 
-                    wordOverlap += words[n].charAt(i);
-                    var withHypeh = wordOverlap + "-";
+                  wordOverlap += words[n].charAt(i);
+                  var withHypeh = wordOverlap + "-";
 
-                    if (context.measureText(withHypeh).width >= maxW) {
+                  if (context.measureText(withHypeh).width >= maxW) {
                         // add hyphen when splitting a word
                         withHypeh = wordOverlap.substr(0, wordOverlap.length - 2) + "-";
                         // update current word with remainder
                         words[n] = words[n].substr(wordOverlap.length - 1, words[n].length);
                         formatted += withHypeh; // add hypenated word
                         break;
+                      }
                     }
-                }
-            }
-            while (justify == 'right' && context.measureText(' ' + currentLine).width < maxW)
-            currentLine = ' ' + currentLine;
+                  }
+                  while (justify == 'right' && context.measureText(' ' + currentLine).width < maxW)
+                    currentLine = ' ' + currentLine;
 
-            while (justify == 'center' && context.measureText(' ' + currentLine + ' ').width < maxW)
-            currentLine = ' ' + currentLine + ' ';
+                  while (justify == 'center' && context.measureText(' ' + currentLine + ' ').width < maxW)
+                    currentLine = ' ' + currentLine + ' ';
 
-            formatted += currentLine + '\n';
-            breakLineCount++;
-            currentLine = "";
+                  formatted += currentLine + '\n';
+                  breakLineCount++;
+                  currentLine = "";
 
             continue; // restart cycle
-        }
-        if (maxHAdjusted > 0 && (breakLineCount * lineHeight) > maxHAdjusted) {
+          }
+          if (maxHAdjusted > 0 && (breakLineCount * lineHeight) > maxHAdjusted) {
             // add ... at the end indicating text was cutoff
             formatted = formatted.substr(0, formatted.length - 3) + "...\n";
             currentLine = "";
             break;
+          }
+          n++;
         }
-        n++;
-    }
 
-    if (currentLine != '') {
-        while (justify == 'right' && context.measureText(' ' + currentLine).width < maxW)
-        currentLine = ' ' + currentLine;
+        if (currentLine != '') {
+          while (justify == 'right' && context.measureText(' ' + currentLine).width < maxW)
+            currentLine = ' ' + currentLine;
 
-        while (justify == 'center' && context.measureText(' ' + currentLine + ' ').width < maxW)
-        currentLine = ' ' + currentLine + ' ';
+          while (justify == 'center' && context.measureText(' ' + currentLine + ' ').width < maxW)
+            currentLine = ' ' + currentLine + ' ';
 
-        formatted += currentLine + '\n';
-        breakLineCount++;
-        currentLine = "";
-    }
+          formatted += currentLine + '\n';
+          breakLineCount++;
+          currentLine = "";
+        }
 
     // get rid of empy newline at the end
     formatted = formatted.substr(0, formatted.length - 1);
 
     var ret = new fabric.Text(formatted, { // return new text-wrapped text obj
-        left: t.left,
-        top: t.top,
-        fill: t.fill,
-        fontFamily: t.fontFamily,
-        fontSize: t.fontSize,
-        originX: t.originX,
-        originY: t.originY,
-        angle: t.angle,
+      left: t.left,
+      top: t.top,
+      fill: t.fill,
+      fontFamily: t.fontFamily,
+      fontSize: t.fontSize,
+      originX: t.originX,
+      originY: t.originY,
+      angle: t.angle,
     });
     return ret;
-}
+  }
 
 
 
@@ -135,32 +146,68 @@ function wrapCanvasText(t, canvas, maxW, maxH, justify) {
 function cross_anime (name,x1,x2,y1,y2,t) {
   // body...
 
-name.animate('left', x2, {
-  from:x1,
-  duration:t,
-  onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-easing: fabric.util.ease.easeOutCirc,
+  name.animate('left', x2, {
+    from:x1,
+    duration:t,
+    onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+    easing: fabric.util.ease.easeOutCirc,
 
-});
+  });
 
-     name.animate('opacity', 1, {
-  from:0,
-  onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-  duration: t,
-easing: fabric.util.ease.easeOutCirc,
+  name.animate('opacity', 1, {
+    from:0,
+    onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+    duration: t,
+    easing: fabric.util.ease.easeOutCirc,
   });
 
 
-name.animate('top', y2, {
-  from:y1,
-  duration:t,
-  onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-  easing: fabric.util.ease.easeOutCirc,
-});
+  name.animate('top', y2, {
+    from:y1,
+    duration:t,
+    onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+    easing: fabric.util.ease.easeOutCirc,
+  });
+}
+
+//function for clipping images with rounded corners
+
+
+function roundedRect(ctx,x,y,width,height,radius){
+  ctx.beginPath();
+  ctx.moveTo(x,y+radius);
+  ctx.lineTo(x,y+height-radius);
+  ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
+  ctx.lineTo(x+width-radius,y+height);
+  ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+  ctx.lineTo(x+width,y+radius);
+  ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
+  ctx.lineTo(x+radius,y);
+  ctx.quadraticCurveTo(x,y,x,y+radius);
 }
 
 
+function shuffle(array) {
+  var tmp, current, top = array.length;
+  if(top) while(--top) {
+    current = Math.floor(Math.random() * (top + 1));
+    tmp = array[current];
+    array[current] = array[top];
+    array[top] = tmp;
+  }
+  return array;
+}
 
+function moodIcons() {
+var mood = {};  // or just []
+mood['angry'] = 'http://images.clipartpanda.com/smiley-face-transparent-background-smile-triste-421a98.gif';
+mood['sad'] = 'http://images.clipartpanda.com/smiley-face-transparent-background-smile-triste-421a98.gif';
+mood['happy'] = 'http://images.clipartpanda.com/smiley-face-transparent-background-smile-triste-421a98.gif';
+mood['super'] = 'http://images.clipartpanda.com/smiley-face-transparent-background-smile-triste-421a98.gif';
+
+return mood;
+
+}
 
 
 

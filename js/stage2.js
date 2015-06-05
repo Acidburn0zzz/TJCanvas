@@ -8,7 +8,6 @@ var workableHeight;   // the entire area minus the heading area for the buddies 
 function createStage2(canvas, friends){
 	// clear all objects added for stage 1
 	canvas.clear();
-
 	// set canavs background image 
 	canvas.setBackgroundImage('./img/buddy_bg.jpg', canvas.renderAll.bind(canvas), {
 	  opacity: 0.5,
@@ -88,40 +87,279 @@ function addBuddy(canvas, myLeft, myTop, width, height, picURL, name){
 	// get the URL and make a circular image
 	fabric.Image.fromURL(picURL, function(oImg) {
 		oImg.scale(1.0).set({
-			left: myLeft, 
-		  	top: myTop,
+
 			width: width,
 			height: height,
-	        clipTo: function (ctx) {
-	        	// context.arc(x, y, r, sAngle, eAngle, counterclockwise);
-	            ctx.arc(0, 0, width/2, 0, Math.PI * 2, true);
-	          }
+clipTo: function (ctx) {
+roundedRect(ctx,-width/2,-height/2,width,height,15);
+      }
 		});
-
 		// Add a name below the text
 		// And group it with above image
-		var text = new fabric.Text(name, { 
-			left: myLeft, 
-		  	top: myTop + height + 10,
-			fontFamily: 'Comic Sans',
-			fontSize: 20,
-			fontStyle: 'italic',
-			shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
-		});
+		// var text = new fabric.Text(name, { 
+		// 	left: myLeft, 
+		//   	top: myTop + height + 10,
+		// 	fontFamily: 'Comic Sans',
+		// 	fontSize: 20,
+		// 	fontStyle: 'italic',
+		// 	shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+		// });
 
-		var group = new fabric.Group([ oImg, text ], {
-		 
+	var border = new fabric.Rect({
+
+	width: width,
+	height: height,
+    fill: false,
+    stroke: '#fff',
+    originX: 'left',
+    originY: 'top',
+    strokeWidth:2,
+    rx: 15,
+    ry: 15
+	});
+
+
+		var group = new fabric.Group([ oImg, border ], {
+	left: myLeft, 
+	top: myTop,
 		});
 
 		canvas.add(group);
 
-		// Add animation
-		group.animate('left', myLeft, {
+group.animate('left', myLeft, {
 			from: 0,
 		  	onChange: canvas.renderAll.bind(canvas),
 		  	duration: 2000,
-		  	easing: fabric.util.ease.easeOutBounce
+		  	easing: fabric.util.ease.easeOutBack,
+		  	onComplete: function(){
+
+
+
+var rect = new fabric.Rect({
+		left: myLeft+10,
+		top: myTop + height-10,
+		fill: '#809eff',
+		height: 30,
+		rx: 15,
+		ry:15,
+		originX: 'left',
+		originY: 'top',
+		angle:-8,
+	});
+	canvasForMemories.add(rect);
+	canvasForMemories.renderAll();
+	rect.animate('height', 30, {
+		from: 0,
+		onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+		duration: 500,
+		easing: fabric.util.ease.easeInQuad,
+	});
+	rect.animate('width', 200, {
+		from: 0,
+		onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+		duration: 500,
+		easing: fabric.util.ease.easeInQuad,
+		onComplete: function(){
+
+			rect.animate('opacity', 1, {
+				from: 1,
+				onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+				duration: 1500,
+				easing: fabric.util.ease.easeInQuad,
+				onComplete: function(){
+					rect.animate('width', 0, {
+						from: 50,
+						onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+						duration: 500,
+						easing: fabric.util.ease.easeInQuad,
+
+					});
+
+
+				}
+			});
+
+
+		}
+	});
+
+
+	var rect2 = new fabric.Rect({
+		left: myLeft+10,
+		top: myTop + height-10,
+		fill: '#ffce69',
+		height: 30,
+		rx: 15,
+		ry:15,
+		originX: 'left',
+		originY: 'top',
+		angle:-8,
+	});
+	canvasForMemories.add(rect2);
+
+	rect2.animate('opacity', 1, {
+		from: 1,
+		onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+		duration: 250,
+		easing: fabric.util.ease.easeInQuad,
+		onComplete: function(){
+				rect2.animate('height', 30, {
+		from: 0,
+		onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+		duration: 500,
+		easing: fabric.util.ease.easeInQuad,
+	});
+			rect2.animate('width', 200, {
+				from: 0,
+				onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+				duration: 500,
+				easing: fabric.util.ease.easeInQuad,
+				onComplete: function(){
+
+					rect2.animate('opacity', 1, {
+						from:1,
+						onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+						duration: 1000,
+						easing: fabric.util.ease.easeInQuad,
+						onComplete: function(){
+							rect2.animate('width', 0, {
+								from: 200,
+								onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+								duration: 500,
+								easing: fabric.util.ease.easeInQuad,
+								onComplete: function(){
+
+
+								}
+							});
+
+
+						}
+					});
+
+
+				}
+			});
+
+
+		}
+	});
+
+
+var text = new fabric.Text(name, { 
+		left: -400,
+		top: myTop + height-5,
+		originX: 'center',
+		originY: 'center',
+		fontFamily: 'Comic Sans',
+		fontSize: 30,
+		fill: '#ffffff',
+		angle: -8,
+		
+	});
+	canvasForMemories.add(text);
+
+	text.animate('opacity', 1, {
+		from: 1,
+		onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+		duration: 250,
+		easing: fabric.util.ease.easeInQuad,
+		onComplete: function(){
+
+
+			text.animate('left', myLeft+100, {
+				from: -400,
+				onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+				duration: 500,
+				easing: fabric.util.ease.easeInQuad,
+				onComplete: function(){
+					text.animate('opacity', 1, {
+						from: 1,
+						onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+						duration: 1000,
+						easing: fabric.util.ease.easeInQuad,
+						onComplete: function(){
+
+							text.animate('opacity', 0, {
+								from: 1,
+								onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+								duration: 500,
+								easing: fabric.util.ease.easeInQuad,
+
+								onComplete: function(){
+																group.animate('left', natWidth+200, {
+			from: myLeft,
+		  	onChange: canvas.renderAll.bind(canvas),
+		  	duration: 2000,
+		  	easing: fabric.util.ease.easeOutBack,
+		  	});	
+								}
+
+							});
+
+
+
+
+						}
+
+
+
+
+					});
+
+				}
+
+
+			});
+
+
+
+
+
+		}
+
+
+
+});
+
+
+
+
+		  	}
 		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	});
 }
 

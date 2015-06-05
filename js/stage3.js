@@ -26,6 +26,8 @@ var milestoneColumnGap = 200;
 var currMilestoneLeft;
 var currMilestoneTop;
 
+
+
 function createStage3(myCanvas, milestones){
 	// clear all objects added for stage 1
 	console.log(milestones , "in createStage3")
@@ -33,6 +35,8 @@ function createStage3(myCanvas, milestones){
 	canvas = myCanvas;
 	milestonesArray = milestones;
 	calculateMilestoneLefts();
+	
+	showSidePictures();
 	totalMilestones = milestonesArray.length;
 	buildMilestones();
 }
@@ -44,7 +48,10 @@ function buildMilestones(){
 		currMilestoneItem = milestonesArray[curMilestoneIndex].stone;
 		console.log("in buildMilestones: currMilestoneLeft = ", getMilestoneLeft(curMilestoneIndex));
 		console.log("in buildMilestones: currMilestoneTop = ", getMilestoneTop(curMilestoneIndex));
-		addMilestone(getMilestoneLeft(curMilestoneIndex), getMilestoneTop(curMilestoneIndex));
+		milestoneItemLeft = getMilestoneLeft(curMilestoneIndex);
+		milestoneItemTop = getMilestoneTop(curMilestoneIndex);
+		// addMilestone(milestoneItemLeft, milestoneItemTop);
+		initPictures();
 	}
 	else{
 		console.log("no more milestone to show now");
@@ -87,9 +94,7 @@ function addMilestone(myLeft, myTop){
 		  	easing: fabric.util.ease.easeOutBounce,
 		  	onComplete: function() {
 		     	// Here
-		     	curMilestoneIndex++;
-		     	currMilestoneLeft = myLeft;
-		     	currMilestoneTop = myTop;
+		     	
 		     	initPictures();
 		   }
 		});

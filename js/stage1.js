@@ -3,12 +3,11 @@ var jInfo;
 
 function createStage1(canvas, journeyInfo){
 	jInfo = journeyInfo;
-
 	var bg = getBGImage(canvas);
 	var txt1 = getJourneyName(canvas);
-	var txt2 = getJourneyTagline(canvas);
-	var txt3 = getJourneyDates(canvas);
-	var txt4 = getJourneyPlaces(canvas);
+	// var txt2 = getJourneyTagline(canvas);
+	// var txt3 = getJourneyDates(canvas);
+	// var txt4 = getJourneyPlaces(canvas);
 
 	// console.log("jInfo = ", journeyInfo);
 	// console.log("jInfo.name = ", journeyInfo.name);
@@ -20,53 +19,229 @@ function getBGImage(canvas){
 	console.log("in getBGImage ",jInfo);
 	fabric.Image.fromURL('./img/7.jpg', function(oImg) {
 		oImg.scale(1.0).set({
-			left: 1,
-			top: 1,
-			width: canvas.width,
-			height: canvas.height
+			left: 0,
+			top: 0,
+			width: natWidth,
+			height: natHeight
 		});
 		canvas.add(oImg).setActiveObject(oImg);
 		oImg.sendToBack();
-		//canvas.renderAll();
-
-		return oImg;
+		canvas.deactivateAll().renderAll();
 	});
 
 	
 }
 
 function getJourneyName(canvas){
-	var text = new fabric.Text(jInfo.name, { 
-		top: 60,
-		fontFamily: 'Comic Sans',
-		fontSize: 40,
-		fontWeight: 'bold',
-		shadow: 'rgba(0,0,0,0.3) 5px 5px 5px'
+	
+	var rect = new fabric.Rect({
+		left: natWidth*1/8,
+		top: natHeight/2+250,
+		fill: '#809eff',
+		height: 50,
+		rx: 20,
+		ry:20,
+		originX: 'left',
+		originY: 'center',
 	});
-	canvas.add(text);
-	text.centerH();
+	canvas.add(rect);
+	rect.animate('width', natWidth*3/4, {
+		from: 0,
+		onChange: canvas.renderAll.bind(canvas),
+		duration: 750,
+		easing: fabric.util.ease.easeInQuad,
+		onComplete: function(){
 
-	return text;
-}
+			rect.animate('angle', 0, {
+				from: 0,
+				onChange: canvas.renderAll.bind(canvas),
+				duration: 3000,
+				easing: fabric.util.ease.easeInQuad,
+				onComplete: function(){
+					rect.animate('width', 0, {
+						from: natWidth*3/4,
+						onChange: canvas.renderAll.bind(canvas),
+						duration: 500,
+						easing: fabric.util.ease.easeInQuad,
 
-function getJourneyTagline(canvas){
-	var tagLine = (jInfo.tag_line === null) ? 'Not all those who wander are lost!' : jInfo.tag_line;
-	var text = new fabric.Text( tagLine, { 
-		top: 100,
+					});
+
+
+				}
+			});
+
+
+		}
+	});
+
+
+
+	var rect2 = new fabric.Rect({
+		left: natWidth*1/8,
+		top: natHeight/2+250,
+		fill: '#ffce69',
+
+		height: 50,
+		rx: 20,
+		ry:20,
+		originX: 'left',
+		originY: 'center',
+	});
+	canvas.add(rect2);
+
+
+	rect2.animate('angle', 0, {
+		from: 0,
+		onChange: canvas.renderAll.bind(canvas),
+		duration: 500,
+		easing: fabric.util.ease.easeInQuad,
+		onComplete: function(){
+
+			rect2.animate('width', natWidth*3/4, {
+				from: 0,
+				onChange: canvas.renderAll.bind(canvas),
+				duration: 500,
+				easing: fabric.util.ease.easeInQuad,
+				onComplete: function(){
+
+					rect2.animate('angle', 0, {
+						from: 0,
+						onChange: canvas.renderAll.bind(canvas),
+						duration: 2500,
+						easing: fabric.util.ease.easeInQuad,
+						onComplete: function(){
+							rect2.animate('width', 0, {
+								from: natWidth*3/4,
+								onChange: canvas.renderAll.bind(canvas),
+								duration: 500,
+								easing: fabric.util.ease.easeInQuad,
+								onComplete: function(){
+
+
+								}
+							});
+
+
+						}
+					});
+
+
+				}
+			});
+
+
+		}
+	});
+
+
+
+
+
+
+
+	var text = new fabric.Text(jInfo.name, { 
+		
+		top: natHeight/2+250,
+		left:-1000,
+		originX: 'center',
+		originY: 'center',
 		fontFamily: 'Comic Sans',
 		fontSize: 30,
-		fontStyle: 'italic',
-		shadow: 'rgba(0,0,0,0.3) 5px 5px 5px'
+		fill: '#14318e',
+		
 	});
 	canvas.add(text);
-	text.centerH();
+
+
+	text.animate('angle', 0, {
+		from: 0,
+		onChange: canvas.renderAll.bind(canvas),
+		duration: 500,
+		easing: fabric.util.ease.easeInQuad,
+		onComplete: function(){
+
+
+			text.animate('left', natWidth/2, {
+				from: -1000,
+				onChange: canvas.renderAll.bind(canvas),
+				duration: 500,
+				easing: fabric.util.ease.easeInQuad,
+				onComplete: function(){
+					text.animate('angle', 0, {
+						from: 0,
+						onChange: canvas.renderAll.bind(canvas),
+						duration: 3000,
+						easing: fabric.util.ease.easeInQuad,
+						onComplete: function(){
+
+							text.animate('left', -1000, {
+								from: natWidth/2,
+								onChange: canvas.renderAll.bind(canvas),
+								duration: 500,
+								easing: fabric.util.ease.easeInQuad,
+
+							});
+
+
+
+
+						}
+
+
+
+
+					});
+
+				}
+
+
+			});
+
+
+
+
+
+		}
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+
+	function getJourneyTagline(canvas){
+		var tagLine = (jInfo.tag_line === null) ? 'Not all those who wander are lost!' : jInfo.tag_line;
+		var text = new fabric.Text( tagLine, { 
+			top: 100,
+			fontFamily: 'Comic Sans',
+			fontSize: 30,
+			fontStyle: 'italic',
+			shadow: 'rgba(0,0,0,0.3) 5px 5px 5px'
+		});
+		canvas.add(text);
+		text.centerH();
 
 	// Add animation
-	text.animate('left', (canvas.width/2) - (text.width/2), {
+	text.animate('left', (natWidth/2) - (text.width/2), {
 		from: 0,
-	  	onChange: canvas.renderAll.bind(canvas),
-	  	duration: 2000,
-	  	easing: fabric.util.ease.easeOutBounce
+		onChange: canvas.renderAll.bind(canvas),
+		duration: 2000,
+		easing: fabric.util.ease.easeOutBounce
 	});
 
 	return text;
@@ -74,11 +249,11 @@ function getJourneyTagline(canvas){
 
 function getJourneyDates(canvas){
 	var timestamp = new Date(jInfo.start_date);
-    var formattedDate = timestamp.toDateString();
+	var formattedDate = timestamp.toDateString();
 
 	var text = new fabric.Text(formattedDate, { 
 		left: 50, 
-		top: (canvas.height - 100),
+		top: (natHeight - 100),
 		fontFamily: 'Comic Sans',
 		fontSize: 30,
 		fontStyle: 'italic',
@@ -91,8 +266,8 @@ function getJourneyDates(canvas){
 
 function getJourneyPlaces(canvas){
 	var text = new fabric.Text(jInfo.place[0].place_item, { 
-		left: (canvas.width - 100), 
-		top: (canvas.height - 100),
+		left: (natWidth - 100), 
+		top: (natHeight - 100),
 		fontFamily: 'Comic Sans',
 		fontSize: 30,
 		fontStyle: 'italic',

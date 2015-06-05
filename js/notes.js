@@ -42,13 +42,6 @@ function addNote(){
 	console.log("addNote called");
 	// set canavs background image 
 	// Put same image with a little opacity
-	canvasForMemories.setBackgroundColor('rgba(255, 255, 255, 1)', canvas.renderAll.bind(canvas), {
-		
-		width : canvasForMemories.width,
-		height: canvasForMemories.height,
-		originX: 'left',
-		originY: 'top'
-	});
 
 
 

@@ -9,6 +9,16 @@ var moodTop = 100;
 var cent=$(window).width();
 var hei=$(window).height();
 
+var totalAvailableWidth = natWidth - gapOnRight - sidePicItemWidth;
+var moodMargin = 40;
+var moodMainWidth = totalAvailableWidth - moodMargin*2;
+var moodMainHeight = natHeight - moodMargin*2;
+var moodPicHeight = 200;
+
+var moodIcon = moodIcons();
+
+
+
 var picURL="https://s3-ap-southeast-1.amazonaws.com/traveljar-production/uploads/picture/picture_file/5/abhinav-side.jpg";
 
 function initMood(){
@@ -32,8 +42,10 @@ function showMoods(){
 		// this is the break-point for videos
 		console.log("no moods present");
 		currMoodIndex = 0;
-
-		initPath();
+		curMilestoneIndex++;
+		currMilestoneLeft = milestoneItemLeft;
+		currMilestoneTop = milestoneItemTop;
+		initPictures();
 	}
 }
 
@@ -44,85 +56,57 @@ function addMood(){
 	console.log("addMood called");
 	// set canavs background image 
 	// Put same image with a little opacity
-	canvasForMemories.setBackgroundColor('#5bb9dc', canvas.renderAll.bind(canvas), {
-		
-		width : canvasForMemories.width,
-		height: canvasForMemories.height,
-		originX: 'left',
-		originY: 'top'
+
+
+
+	var rect = new fabric.Rect({
+		left: moodMargin,
+		top: moodMargin,
+		opacity: 1,
+		fill: '#234b31',
+		width: moodMainWidth,
+		height: moodMainHeight,
+		rx:15,
+		ry:15,
+
 	});
-
-
-
-var rect = new fabric.Rect({
-	left: cent/2,
-			top: hei/2,
-	opacity: 1,
-	fill: 'white',
-			width: (canvasForMemories.width -400+20),
-			height: (canvasForMemories.height-200+20 ),
-        originX: 'center',
-			originY: 'center'
-});
-
-canvasForMemories.add(rect);
-
-
-var people=currMoodItem.person;
-var res = people.split(", ");
-var l=res.length;
-console.log(l);
-
-
-
-
-
-
-
-
-
-
-
-
-fabric.Image.fromURL('http://74211.com/wallpaper/picture_big/free_wallpaper_of_beautiful_scenery_wonderful_Glacier_National_Park.jpg', function(oImg) {
-  // scale image down, and flip it, before adding it onto canvas
-  oImg.scale(1).set({
-			left: cent/2,
-			top: hei/2,
-			width: (canvasForMemories.width -400),
-			height: (canvasForMemories.height-200 ),
-			
-			opacity:0.2,
-			originX: 'center',
-			originY: 'center'
-			//stroke: 'white',
-			//strokeWidth: 10
-
-		});
-
-  canvasForMemories.add(oImg);
-
-
+	canvasForMemories.add(rect);
 
 	fabric.Image.fromURL(picURL, function(proPic) {
 		proPic.scale(1.0).set({
-			left: cent/2,
-			top: hei/2-150,
-			width: (120),
-			height: (120),
+			left: moodMargin+moodMainWidth/3,
+			top: moodMargin+120,
+			width: moodPicHeight,
+			height: moodPicHeight,
 			originX: 'center',
 			originY: 'center',
-	        clipTo: function (ctx) {
-	        	// context.arc(x, y, r, sAngle, eAngle, counterclockwise);
-	            ctx.arc(0, 0, 60, 0, Math.PI * 2, true);
-	          }
-		});
+			clipTo: function (ctx) {
+				roundedRect(ctx, -moodPicHeight/2, -moodPicHeight/2, moodPicHeight, moodPicHeight, 15);
+			}
 
+	    });
+
+	var border = new fabric.Rect({
+
+	width: moodPicHeight+2,
+	height: moodPicHeight+2,
+    fill: false,
+    stroke: '#fff',
+    originX: 'center',
+    originY: 'center',
+    strokeWidth:3,
+    left: moodMargin+moodMainWidth/3,
+			top: moodMargin+120,
+    rx: 15,
+    ry: 15
+	});
+  canvasForMemories.add(border);
 		// Add a name below the text
 		// And group it with above image
-		var text = new fabric.Text(res[0], { 
-			left: cent/2,
-			top: hei/2-50,
+		var personName = new fabric.Text(res[0], { 
+			left: moodMargin+moodMainWidth/3,
+			top: moodMargin+moodPicHeight+60,
+			textDecoration: 'underline',
 			width: (60),
 			height: (60),
 			originX: 'center',
@@ -132,32 +116,84 @@ fabric.Image.fromURL('http://74211.com/wallpaper/picture_big/free_wallpaper_of_b
 			fill:'#ffffff',
 		});
 
-		var group = new fabric.Group([ proPic, text ], {
-		 
+  var simp_text = new fabric.Text("was feeling", { 
+
+  	fill:'#ffffff',
+  	left: moodMargin+moodMainWidth/3,
+  	top: moodMargin+moodPicHeight+60+50,
+  	fontFamily:'Segoe UI',
+  	fontSize: 45,
+  	originX: 'center',
+  	originY: 'center',
+
+
+  });
+
+
+
+  var simp_text2 = new fabric.Text("because of", { 
+
+  	fill:'#ffffff',
+  	left: moodMargin+moodMainWidth/3,
+  	top: moodMargin+moodPicHeight+60+50+120,
+  	fontFamily:'Segoe UI',
+  	fontSize: 45,
+  	originX: 'center',
+  	originY: 'center',
+
+
+  });
+
+
+  var reason = new fabric.Text("\""+currMoodItem.reason+"\"", { 
+
+  	fill:'#ffffff',
+  	fontFamily:'Segoe UI',
+  	fontSize: 45,
+  	originX: 'center',
+
+});
+
+  var reason_f = wrapCanvasText(reason, canvasForMemories, 600, 800, 'justify');
+  reason_f.top = moodMargin+moodPicHeight+60+50+120+20;
+  reason_f.left = moodMargin+moodMainWidth/3;
+
+
+  var group2 = new fabric.Group([ simp_text,simp_text2, reason_f ], {
+
+  });
+
+  canvasForMemories.add(group2);
+
+
+
+		var group = new fabric.Group([ proPic, personName ], {
+
 		});
 
 		canvasForMemories.add(group);
 
-	group.animate('opacity', 1, {
+		group.animate('opacity', 1, {
 			from: 0,
-		  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-		  	duration: 3000,
-		  	onComplete: function(){
-		  		console.log("adsdasdasdasd");
-		  		group.animate('angle', 0, {
-			from: 0,
-		  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-		  	duration: 4000,
+			onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+			duration: 1500,
+			onComplete: function(){
+				console.log("adsdasdasdasd");
+				group.animate('angle', 0, {
+					from: 0,
+					onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+					duration: 4000,
 
-		  	onComplete: function(){
-		  		canvasForMemories.remove(group);
-		  		
-		  	}
-		  });
+					onComplete: function(){
+						canvasForMemories.remove(group);
+						canvasForMemories.remove(group2);
+						canvasForMemories.remove(border);
+					}
+				});
 
-		  		
-		  		
-		  	}
+
+
+			}
 
 		});
 
@@ -165,23 +201,22 @@ fabric.Image.fromURL('http://74211.com/wallpaper/picture_big/free_wallpaper_of_b
 
 
 	});
+var people=currMoodItem.person;
+var res = people.split(", ");
+var l=res.length;
+console.log(l);
 
-
-
-
-
-
-fabric.Image.fromURL('http://images.clipartpanda.com/smiley-face-transparent-background-smile-triste-421a98.gif', function(moodi) {
+  fabric.Image.fromURL(moodIcon[currMoodItem.mood], function(moodi) {
   // scale image down, and flip it, before adding it onto canvas
   moodi.scale(1).set({
-			left: cent/2,
-			top: hei/2+50,
-			width: (60),
-			height: (60),
-		
+  	left: moodMargin+moodMainWidth/3,
+  	top: moodMargin+moodPicHeight+60+50+60,
+  	width: (60),
+  	height: (60),
 
-			originX: 'center',
-			originY: 'center',
+
+  	originX: 'center',
+  	originY: 'center',
 			//stroke: 'white',
 			//strokeWidth: 10
 
@@ -189,120 +224,33 @@ fabric.Image.fromURL('http://images.clipartpanda.com/smiley-face-transparent-bac
 
   canvasForMemories.add(moodi);
 
-moodi.animate('opacity', 1, {
-			from: 0,
-		  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-		  	duration: 3000,
-		  	onComplete: function(){
-		  		moodi.animate('angle', 0, {
-			from: 0,
-		  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-		  	duration: 4000,
-		  	onComplete: function(){
-		  		canvasForMemories.remove(moodi);
-		  		
-		  	}
-		  });
-		  		
-		  		
-		  	}
+  moodi.animate('opacity', 1, {
+  	from: 0,
+  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+  	duration: 3000,
+  	onComplete: function(){
+  		moodi.animate('angle', 0, {
+  			from: 0,
+  			onChange: canvasForMemories.renderAll.bind(canvasForMemories),
+  			duration: 4000,
+  			onComplete: function(){
+  				canvasForMemories.remove(moodi);
+				currMoodIndex++;
+  				
+  				canvasForMemories.remove(rect);
+  				
 
-		});
-
-
-});
-
-var simp_text = new fabric.Text("was feeling", { 
-
-		fill:'#ffffff',
-		left: cent/2,
-		top: hei/2,
-		fontFamily:'Segoe UI',
-		fontSize: 45,
-		originX: 'center',
-		originY: 'center',
+  				showMoods();
+  			}
+  		});
 
 
-	});
+  	}
 
-
-
-var simp_text2 = new fabric.Text("because of", { 
-
-		fill:'#ffffff',
-		left: cent/2,
-		top: hei/2+100,
-		fontFamily:'Segoe UI',
-		fontSize: 45,
-		originX: 'center',
-		originY: 'center',
-
-
-	});
-
-
-var reason = new fabric.Text("\""+currMoodItem.reason+"\"", { 
-
-		fill:'#ffffff',
-		fontFamily:'Segoe UI',
-		fontSize: 45,
-		originX: 'center',
-		
-
-
-	});
-
-var reason_f = wrapCanvasText(reason, canvasForMemories, 600, 800, 'justify');
-	reason_f.top = hei/2+120;
-	reason_f.left = cent/2;
-	
-
-var group2 = new fabric.Group([ simp_text,simp_text2, reason_f ], {
-		 
-		});
-
-		canvasForMemories.add(group2);
-
-
-	group2.animate('opacity', 1, {
-			from: 0,
-		  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-		  	duration: 3000,
-		  	
-		  	onComplete: function(){
-
-
-	group2.animate('angle', 0, {
-			from: 0,
-		  	onChange: canvasForMemories.renderAll.bind(canvasForMemories),
-		  	duration: 4000,
-
-		  	onComplete: function(){
-		  		currMoodIndex++;
-		  		canvasForMemories.remove(group2);
-		  		canvasForMemories.remove(rect);
-		  		canvasForMemories.remove(oImg);
-
-		  		showMoods();
-		  		
-		  	}
-		  });
-
-		  		
-		  	}
-		});
+  });
 
 
 });
-
-
-
-
-
-
-
-
-
 
 
 
